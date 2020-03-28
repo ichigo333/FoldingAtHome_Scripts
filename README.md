@@ -14,6 +14,10 @@ in logs directory.  Please don't forget that current log.txt is outside of log d
 
 ---
 
+## Config
+
+Config has 2 values `path` and `user`.  Path is the path to your file you want to parse and the user is your Folding@Home user. 
+
 ## Requirements
 
 - Python3
