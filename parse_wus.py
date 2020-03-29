@@ -1,4 +1,6 @@
 import json, time, requests, sys, os
+from config import Config
+
 
 def get_value(index, name):
     try:
@@ -22,14 +24,23 @@ def get_apiInfo(project, run, clone, gen, user):
         print("ERROR: cannot get info from API")
 
 
-dir_path = os.path.dirname(os.path.realpath(__file__))
-configFile = open(f"{dir_path}/config.json", "r")
-config = json.loads(configFile.read())
+def read_config():
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    configFile = open(f"{dir_path}/config.json", "r")
+    config = json.loads(configFile.read())
+    
+    inputPath = config.get('inputPath')
+    outputPath = config.get('outputPath')
+    user = config.get('user')
+    
+    configFile.close()
+    return Config(inputPath, outputPath, user)
 
-path = config.get('path')
-user = config.get('user')
 
-file = open(path, "r")
+
+config = read_config()
+
+file = open(config.inputPath, "r")
 lineList = file.readlines()
 
 project = ""
@@ -43,7 +54,7 @@ for line in lineList:
     gen = get_value(9,'gen')
     unit = get_value(11,'unit').rstrip()
 
-    wu = get_apiInfo(project, run, clone, gen, user)
+    wu = get_apiInfo(project, run, clone, gen, config.user)
     if wu != "":
         code = wu.get('code')
         credit = wu.get('credit')
