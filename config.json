@@ -1,4 +1,5 @@
 {
-    "path":"xxx",
-    "user":"xxx"
+    "inputPath": "/change_me/input.txt",
+    "outputPath" : "/change_me/output.txt",
+    "user": "change me"
 }

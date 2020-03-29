@@ -24,23 +24,24 @@ def read_config():
 def main():
     config = read_config()
 
-    inputFile = open(config.inputPath, "r")
-    lineList = inputFile.readlines()
+    with open(config.inputPath, "r") as inputFile:
+        lineList = inputFile.readlines()
 
-    for line in lineList:
-        lineSplit = line.split(" ")
+    with open(config.outputPath, "w") as outputFile:
+        for line in lineList:
+            lineSplit = line.split(" ")
 
-        wu = Wu()
-        wu.project = get_value(lineSplit, 6,'project')
-        wu.run = get_value(lineSplit, 7,'run')
-        wu.clone = get_value(lineSplit, 8,'clone')
-        wu.gen = get_value(lineSplit,9,'gen')
-        wu.unit = get_value(lineSplit, 11,'unit').rstrip()
-        wu.get_apiInfo(config.user)
+            wu = Wu()
+            wu.project = get_value(lineSplit, 6,'project')
+            wu.run = get_value(lineSplit, 7,'run')
+            wu.clone = get_value(lineSplit, 8,'clone')
+            wu.gen = get_value(lineSplit,9,'gen')
+            wu.unit = get_value(lineSplit, 11,'unit').rstrip()
+            wu.get_apiInfo(config.user)
 
-        print(wu)
+            print(wu)
+            outputFile.write(str(wu) + '\n')
 
-    inputFile.close()
 
 if __name__ == "__main__":
     main()
