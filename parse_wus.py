@@ -1,6 +1,6 @@
 import json, time, requests, sys, os
 from config import Config
-
+from wu import Wu
 
 def get_value(lineSplit, index, name):
     try:
@@ -8,20 +8,6 @@ def get_value(lineSplit, index, name):
             return lineSplit[index].split(':')[1]
     except:
         print("ERROR finding name: ", name, " at index: ", index)
-
-def get_apiInfo(project, run, clone, gen, user):
-    try:
-        uri = f"https://api.foldingathome.org/project/{project}/run/{run}/clone/{clone}/gen/{gen}"
-        response = requests.get(uri)
-        wus = json.loads(response.content)
-        
-        for wu in wus:
-            if wu.get('user') == user:
-                return wu
-        
-        return ""
-    except:
-        print("ERROR: cannot get info from API")
 
 def read_config():
     dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -35,42 +21,26 @@ def read_config():
     configFile.close()
     return Config(inputPath, outputPath, user)
 
-
 def main():
     config = read_config()
 
-    file = open(config.inputPath, "r")
-    lineList = file.readlines()
-
-    project = ""
+    inputFile = open(config.inputPath, "r")
+    lineList = inputFile.readlines()
 
     for line in lineList:
         lineSplit = line.split(" ")
 
-        project = get_value(lineSplit, 6,'project')
-        run = get_value(lineSplit, 7,'run')
-        clone = get_value(lineSplit, 8,'clone')
-        gen = get_value(lineSplit,9,'gen')
-        unit = get_value(lineSplit, 11,'unit').rstrip()
+        wu = Wu()
+        wu.project = get_value(lineSplit, 6,'project')
+        wu.run = get_value(lineSplit, 7,'run')
+        wu.clone = get_value(lineSplit, 8,'clone')
+        wu.gen = get_value(lineSplit,9,'gen')
+        wu.unit = get_value(lineSplit, 11,'unit').rstrip()
+        wu.get_apiInfo(config.user)
 
-        wu = get_apiInfo(project, run, clone, gen, config.user)
-        if wu != "":
-            code = wu.get('code')
-            credit = wu.get('credit')
-            credit_time = wu.get('credit_time')
-            days = wu.get('days')
-            cpuid = wu.get('cpuid')
-        else:
-            code = ""
-            credit = ""
-            credit_time = ""
-            days = ""
-            cpuid = ""
+        print(wu)
 
-
-        print(f"{project},{run},{clone},{gen},{unit},{code},{credit},{credit_time},{days},{cpuid}")
-
-    file.close()
+    inputFile.close()
 
 if __name__ == "__main__":
     main()
