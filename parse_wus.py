@@ -1,4 +1,4 @@
-import json, time, requests, sys, os
+import json, time, requests, sys, os, argparse
 from config import Config
 from wu import Wu
 
@@ -22,6 +22,7 @@ def read_config():
     return Config(inputPath, outputPath, user)
 
 def main():
+
     config = read_config()
 
     with open(config.inputPath, "r") as inputFile:
@@ -29,18 +30,19 @@ def main():
 
     with open(config.outputPath, "w") as outputFile:
         for line in lineList:
-            lineSplit = line.split(" ")
+            if "Sending" in line:
+                lineSplit = line.split(" ")
 
-            wu = Wu()
-            wu.project = get_value(lineSplit, 6,'project')
-            wu.run = get_value(lineSplit, 7,'run')
-            wu.clone = get_value(lineSplit, 8,'clone')
-            wu.gen = get_value(lineSplit,9,'gen')
-            wu.unit = get_value(lineSplit, 11,'unit').rstrip()
-            wu.get_apiInfo(config.user)
+                wu = Wu()
+                wu.project = get_value(lineSplit, 6,'project')
+                wu.run = get_value(lineSplit, 7,'run')
+                wu.clone = get_value(lineSplit, 8,'clone')
+                wu.gen = get_value(lineSplit,9,'gen')
+                wu.unit = get_value(lineSplit, 11,'unit').rstrip()
+                wu.populate_apiInfo(config.user)
 
-            print(wu)
-            outputFile.write(str(wu) + '\n')
+                print(wu)
+                outputFile.write(str(wu) + '\n')
 
 
 if __name__ == "__main__":

@@ -13,7 +13,7 @@ class Wu:
         self.days = ""
         self.cpuid = ""
 
-    def get_apiInfo(self, user):
+    def populate_apiInfo(self, user):
         try:
             uri = f"https://api.foldingathome.org/project/{self.project}/run/{self.run}/clone/{self.clone}/gen/{self.gen}"
             response = requests.get(uri)
