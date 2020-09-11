@@ -12,8 +12,10 @@ def main():
     finalCount = 0
     totalCredits = 0
     sendingCount = 0
+    totalLineNumber = 0
 
     for line in lines:
+        totalLineNumber += 1
         if "Final" in line:
             finalCount += 1
             totalCredits += Decimal(line.split(" ")[3])
@@ -25,6 +27,7 @@ def main():
     print("----------------------------")
     print(f"Final Count: {finalCount}")
     print(f"Sending Count: {sendingCount}")
+    print(f"Total number of lines in log: {totalLineNumber}")
     print(f"Total Credits: {totalCredits}")
 
 
